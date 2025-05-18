@@ -5,8 +5,7 @@ class ListaCorreo {
     private val usuariosPendientes = mutableListOf<Usuario>()
     var tipoSuscripcion: TipoSuscripcion = SuscripcionAbierta()
     var validacionEnvio: ValidacionEnvio = EnvioLibre()
-    lateinit var mailSender: MailSender
-    var prefijo = ""
+    val postObservers = mutableListOf<PostObserver>()
 
     fun suscribir(usuario: Usuario) {
         tipoSuscripcion.suscribir(usuario, this)
@@ -20,20 +19,17 @@ class ListaCorreo {
         tipoSuscripcion.rechazarSuscripcion(usuario, this)
     }
 
-    fun recibirPost(post: Post) {
-        validacionEnvio.validarPost(post, this)
-        mailSender.sendMail(
-            Mail(from = post.mailEmisor(),
-                to = this.getMailsDestino(post),
-                subject = "[${prefijo}] ${post.asunto}",
-                content = post.mensaje)
-        )
+    fun agregarPostObserver(postObserver: PostObserver){
+        postObservers.add(postObserver)
     }
 
-    private fun getMailsDestino(post: Post) = this.suscriptos
+    fun recibirPost(post: Post) {
+        validacionEnvio.validarPost(post, this)
+        postObservers.forEach { it.postRecibido(post, this) }
+    }
+
+    fun getUsuariosDestino(post: Post) = this.suscriptos
         .filter { usuario -> usuario != post.emisor }
-        .map { it.mailPrincipal }
-        .joinToString(", ")
 
     /*********************** Definiciones internas  ***************************/
     fun agregarUsuario(usuario: Usuario) {
