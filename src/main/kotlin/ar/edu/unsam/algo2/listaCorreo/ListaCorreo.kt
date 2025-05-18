@@ -97,8 +97,7 @@ abstract class Validacion: ValidacionEnvio{
     }
 
     fun emisorBloqueado(post: Post){
-        if (post.estadoEmisor())  { throw BusinessException("No puede enviar un mensaje porque el usuario está bloqueado")
-        }
+        if (post.estadoEmisor()) { throw BusinessException("No puede enviar un mensaje porque el usuario está bloqueado") }
     }
 }
 

@@ -37,7 +37,7 @@ class TestEnvioAbierto: DescribeSpec({
             //
             // otra alternativa podría ser crear tests unitarios
 
-            verify(exactly = 1) { mockedMailSender.sendMail(mail = Mail(from="user@usuario.com", to="usuario1@usuario.com, usuario2@usuario.com, usuario3@usuario.com", subject="[algo2] Sale asado?", content = "Lo que dice el asunto")) }
+            verify(exactly = 1) { mockedMailSender.sendMessage(mail = Mail(from="user@usuario.com", to="usuario1@usuario.com, usuario2@usuario.com, usuario3@usuario.com", subject="[algo2] Sale asado?", content = "Lo que dice el asunto")) }
         }
 
         it("un usuario no suscripto puede enviar posts a la lista pero figura a revisar por malas palabras") {

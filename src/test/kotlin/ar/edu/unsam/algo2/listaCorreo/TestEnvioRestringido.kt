@@ -37,7 +37,7 @@ class TestEnvioRestringido: DescribeSpec({
         it ("un usuario suscripto puede enviar post a la lista y sale a los demás usuarios de la misma") {
             val post = Post(emisor = usuarioSuscripto, asunto = "Sale asado?", mensaje = "Lo que dice el asunto")
             lista.enviarPost(post)
-            verify(exactly = 1) { mockedMailSender.sendMail(mail = Mail(from="usuario1@usuario.com", to="usuario2@usuario.com, usuario3@usuario.com", subject="[algo2] Sale asado?", content = "Lo que dice el asunto")) }
+            verify(exactly = 1) { mockedMailSender.sendMessage(mail = Mail(from="usuario1@usuario.com", to="usuario2@usuario.com, usuario3@usuario.com", subject="[algo2] Sale asado?", content = "Lo que dice el asunto")) }
         }
     }
 })

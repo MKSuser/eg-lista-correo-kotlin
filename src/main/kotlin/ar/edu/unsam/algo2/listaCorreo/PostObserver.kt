@@ -10,7 +10,7 @@ class MailObserver: PostObserver{
     var prefijo = ""
 
     override fun postEnviado(post: Post, listaCorreo: ListaCorreo) {
-        mailSender.sendMail(
+        mailSender.sendMessage(
             Mail(from = post.mailEmisor(),
                 to = mailsDestino(listaCorreo, post),
                 subject = "[${prefijo}] ${post.asunto}",
