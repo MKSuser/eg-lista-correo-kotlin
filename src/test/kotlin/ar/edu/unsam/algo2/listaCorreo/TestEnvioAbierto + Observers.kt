@@ -65,6 +65,7 @@ class TestEnvioAbierto: DescribeSpec({
             lista.enviarPost(post)
             lista.enviarPost(post)
             lista.enviarPost(post)
+            lista.enviarPost(post)
 
             usuario.bloqueado shouldBe false
 

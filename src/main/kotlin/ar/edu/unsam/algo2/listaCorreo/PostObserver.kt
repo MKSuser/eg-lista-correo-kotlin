@@ -47,6 +47,8 @@ class UsuarioVerbosoObserver: PostObserver{
     val topeMails: Int = 5
 
     override fun postEnviado(post: Post, listaCorreo: ListaCorreo): Unit {
+        post.envioMail()
+
         val emisor = post.emisor
 
         if (emisor.usuarioEnvioMuchosMails(this)){

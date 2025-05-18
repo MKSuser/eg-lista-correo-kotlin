@@ -26,7 +26,6 @@ class ListaCorreo {
 
     fun enviarPost(post: Post) {
         validacionEnvio.validarPost(post, this)
-        post.envioMail()
         postObservers.forEach { it.postEnviado(post, this) }
     }
 

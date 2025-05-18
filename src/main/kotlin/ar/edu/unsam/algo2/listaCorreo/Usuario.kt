@@ -12,7 +12,7 @@ data class Usuario(
     }
 
     fun usuarioEnvioMuchosMails(postObserver: UsuarioVerbosoObserver): Boolean {
-        return (controlVerboso >= postObserver.topeMails)
+        return (controlVerboso > postObserver.topeMails)
     }
 
     fun bloquear(){ bloqueado = true }

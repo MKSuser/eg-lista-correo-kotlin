@@ -9,3 +9,13 @@ data class Mail(
     val to: String,
     val subject: String,
     val content: String)
+
+interface PhoneTextSender {
+    fun sendText(sms: SMS)
+}
+
+data class SMS(
+    val from: String,
+    val to: String,
+    val subject: String,
+    val content: String)
