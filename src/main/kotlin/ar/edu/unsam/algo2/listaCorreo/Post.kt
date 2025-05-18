@@ -10,4 +10,9 @@ data class Post(
     fun contiene(palabra: String): Boolean{
         return mensaje.contains(palabra) || asunto.contains(palabra)
     }
+
+    fun envioMail() { emisor.envioMail() }
+
+    fun estadoEmisor() = emisor.bloqueado
+
 }

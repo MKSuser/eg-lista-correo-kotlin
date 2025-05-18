@@ -3,6 +3,7 @@ package ar.edu.unsam.algo2.listaCorreo
 class ListaCorreo {
     private val suscriptos = mutableListOf<Usuario>()
     private val usuariosPendientes = mutableListOf<Usuario>()
+
     var tipoSuscripcion: TipoSuscripcion = SuscripcionAbierta()
     var validacionEnvio: ValidacionEnvio = EnvioLibre()
     val postObservers = mutableListOf<PostObserver>()
@@ -23,13 +24,13 @@ class ListaCorreo {
         postObservers.add(postObserver)
     }
 
-    fun recibirPost(post: Post) {
+    fun enviarPost(post: Post) {
         validacionEnvio.validarPost(post, this)
-        postObservers.forEach { it.postRecibido(post, this) }
+        post.envioMail()
+        postObservers.forEach { it.postEnviado(post, this) }
     }
 
-    fun getUsuariosDestino(post: Post) = this.suscriptos
-        .filter { usuario -> usuario != post.emisor }
+    fun getUsuariosDestino(post: Post) = this.suscriptos.filter { usuario -> usuario != post.emisor }
 
     /*********************** Definiciones internas  ***************************/
     fun agregarUsuario(usuario: Usuario) {
@@ -92,15 +93,27 @@ interface ValidacionEnvio {
     fun validarPost(post: Post, listaCorreo: ListaCorreo)
 }
 
-class EnvioLibre : ValidacionEnvio {
+abstract class Validacion: ValidacionEnvio{
     override fun validarPost(post: Post, listaCorreo: ListaCorreo) {
-        // Null Object Pattern, no hay validación
+    }
+
+    fun emisorBloqueado(post: Post){
+        if (post.estadoEmisor())  { throw BusinessException("No puede enviar un mensaje porque el usuario está bloqueado")
+        }
     }
 }
 
-class EnvioRestringido : ValidacionEnvio {
+class EnvioLibre : Validacion() {
     override fun validarPost(post: Post, listaCorreo: ListaCorreo) {
-        if (!listaCorreo.contieneUsuario(post.emisor)) {
+        emisorBloqueado(post)
+    }
+}
+
+class EnvioRestringido : Validacion() {
+    override fun validarPost(post: Post, listaCorreo: ListaCorreo) {
+        emisorBloqueado(post)
+
+        if (!listaCorreo.contieneUsuario(post.emisor))  {
             throw BusinessException("No puede enviar un mensaje porque no pertenece a la lista")
         }
     }
